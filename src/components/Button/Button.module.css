@@ -1,22 +1,10 @@
-import React from 'react';
+.button {
+    display: flex;
 
-type ButtonType = {
-    name: string
-    callBack: ()=> void
+    color: #ffffff;
+    background-color: #79d000;
+    border-radius: 10px;
+    font-size: 30px;
+    cursor: pointer;
+
 }
-
-
-
-
-
-export const Button = (props: ButtonType) => {
-
-    const onClickHandler =()=> {
-        props.callBack()
-    }
-
-
-    return (
-        <button onClick={onClickHandler}>{props.name}</button>
-    );
-};

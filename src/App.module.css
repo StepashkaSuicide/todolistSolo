@@ -1,0 +1,70 @@
+
+.allWrapper {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+}
+
+.wrapperInput1 {
+    border: green 2px solid;
+    border-radius: 5px;
+    padding: 10px;
+
+}
+
+
+.wrapperButton2 {
+    border: #c512e2 2px solid;
+    margin-left: 50px;
+    width: 200px;
+
+
+}
+
+.valueInput {
+    border: gold 2px solid;
+    border-radius: 5px;
+    padding: 10px;
+
+
+}
+
+.valueInput span {
+    padding: 5px;
+    font-size: 20px;
+
+}
+
+
+.containerButton {
+    border: green 2px solid;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+
+
+}
+
+.setButton {
+
+    border: gold 2px solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+
+}
+
+.score  {
+    justify-items: center;
+    justify-content: center;
+    font-size: 30px;
+    border: 2px solid;
+    border-radius: 5px;
+    padding: 10px;
+
+
+}
+
+.red {
+    color: red;
+}
