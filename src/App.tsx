@@ -6,68 +6,84 @@ import {Input} from './components/Input/Input';
 
 function App() {
 
-   const startValue = 0
-   const maxValue = 5
+    const [start, setStart] = useState(0)
+    const [max, setMax] = useState(2)
 
-    const [score, setScore] = useState(startValue)
+    const [score, setScore] = useState(start)
     const [error, setError] = useState<string | null>(null)
-    const [input, setInput] = useState(startValue)
 
 
+    const startScore = (start: number) => {
+        if (start ) {
+            setStart(start)
+        } else {
+            setError('errorrrr')
+
+        }
+        console.log(`start=` + start)
+    }
+
+    const maxScore = (max: number) => {
+        if (max) {
+            setMax(max)
+        } else {
+            setError('errorrrr')
+        }
+        console.log(`max=` +max)
+    }
+
+    const buttonSet = () => {
+        reset(start)
+    }
+
+    // ______________________________________________________
     const increment = () => {
-        if (score < maxValue)
+        if (score < max)
             setScore(score + 1)
     }
-    const reset = () => {
-        setScore(startValue)
+    const reset = (score: number) => {
+        setScore(score)
     }
-
-    const setStartValue = ( ) => {
-        setScore(input)
-    }
-
-
-    const className = `${score === maxValue ? s.red : ''} ${s.score}`
-
+    const className = `${score === max ? s.red : ''} ${s.score}`
+    //______________________________________________________
 
     return (
         <div className={s.allWrapper}>
-
-
             <div className={s.wrapperInput1}>
                 <div className={s.valueInput}>
                     <div>
-                        <span>max value</span>
-                        <Input callBack={setStartValue}/>
+                        <span>start value</span>
+                        <Input type={'number'} callBackInput={startScore}/>
+
+
                     </div>
                     <div>
-                        <span>start value</span>
 
-                        <Input callBack={() => {
-                        }}/>
+                        <span>max value</span>
+                        <Input type={'number'} callBackInput={maxScore}/>
+
                     </div>
                 </div>
                 <div className={s.setButton}>
-                    <Button disabled={true} name={'set'} callBack={() => {
-                    }}/>
+
+                    <Button disabled={false} name={'set'} callBackButton={buttonSet}/>
+
                 </div>
             </div>
-
-
             <div className={s.wrapperButton2}>
-
                 <div className={className}>
-                    <div>{score}</div>
+
+                    <div >
+                        {start>=0 && start < max && max >= 0 ? score : error}
+                    </div>
+
                 </div>
-
-
                 <div className={s.containerButton}>
-                    <span><Button disabled={score === 5} name={'inc'} callBack={increment}/></span>
-                    <span><Button disabled={score === 0} name={'reset'} callBack={reset}/></span>
 
+                    <span><Button disabled={score === max} name={'inc'} callBackButton={increment}/></span>
+                    <span><Button disabled={score === start} name={'reset'} callBackButton={buttonSet}/></span>
 
                 </div>
-
             </div>
         </div>
     );
