@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import s from './App.module.css';
 import {Button} from './components/Button/Button';
 import {Input} from './components/Input/Input';
@@ -7,45 +7,66 @@ import {Input} from './components/Input/Input';
 function App() {
 
     const [start, setStart] = useState(0)
-    const [max, setMax] = useState(2)
+    const [max, setMax] = useState(0)
 
-    const [score, setScore] = useState(start)
+    const [score, setScore] = useState<number | null>(null)
     const [error, setError] = useState<string | null>(null)
 
 
+    useEffect(() => {
+        let valueAsString = localStorage.getItem('scoreValue')
+        if (valueAsString) {
+            let newValue = JSON.parse(valueAsString)
+            setScore(newValue)
+        }
+    }, [])
+
+    useEffect(() => {
+        localStorage.setItem('scoreValue', JSON.stringify(score))
+    }, [score])
+
+
+
     const startScore = (start: number) => {
-        if (start ) {
+        if (start) {
             setStart(start)
         } else {
-            setError('errorrrr')
-
+            setError('start меньше 0')
         }
         console.log(`start=` + start)
     }
 
+
     const maxScore = (max: number) => {
-        if (max) {
+        if (max ) {
             setMax(max)
         } else {
-            setError('errorrrr')
+            setError('максимальное значение меньше стартового')
         }
-        console.log(`max=` +max)
+        console.log(`max=` + max)
     }
 
     const buttonSet = () => {
+
+        localStorage.clear()
         reset(start)
     }
 
     // ______________________________________________________
     const increment = () => {
-        if (score < max)
+        if (score && score < max)
             setScore(score + 1)
     }
     const reset = (score: number) => {
+        localStorage.clear()
         setScore(score)
+
+
     }
     const className = `${score === max ? s.red : ''} ${s.score}`
+
     //______________________________________________________
+
 
     return (
         <div className={s.allWrapper}>
@@ -54,7 +75,6 @@ function App() {
                     <div>
                         <span>start value</span>
                         <Input type={'number'} callBackInput={startScore}/>
-
 
                     </div>
                     <div>
@@ -66,15 +86,16 @@ function App() {
                 </div>
                 <div className={s.setButton}>
 
-                    <Button disabled={false} name={'set'} callBackButton={buttonSet}/>
+                    <Button disabled={start < 0 || max < 0 || max <= start} name={'set'} callBackButton={buttonSet}/>
 
                 </div>
             </div>
             <div className={s.wrapperButton2}>
                 <div className={className}>
-
-                    <div >
-                        {start>=0 && start < max && max >= 0 ? score : error}
+                    {/*className={error ? s.errorRed : ''}*/}
+                    <div>
+                        {score === null ? 'Введите значение and set' : score}
+                        {/*проверка на ввод значение введи и отправь*/}
                     </div>
 
                 </div>
