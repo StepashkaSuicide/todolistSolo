@@ -1,113 +1,73 @@
 import React, {useEffect, useState} from 'react';
 import s from './App.module.css';
 import {Button} from './components/Button/Button';
-import {Input} from './components/Input/Input';
+import { SetValuePage } from './components/setPage/SetValuePage';
+import {TablePage} from './components/TablePage/TablePage';
 
 
 function App() {
-
     const [start, setStart] = useState(0)
     const [max, setMax] = useState(0)
 
     const [score, setScore] = useState<number | null>(null)
     const [error, setError] = useState<string | null>(null)
+    const [edit, setEdit] = useState(false)
+
+
 
 
     useEffect(() => {
-        let valueAsString = localStorage.getItem('scoreValue')
-        if (valueAsString) {
-            let newValue = JSON.parse(valueAsString)
-            setScore(newValue)
+        let startValue = localStorage.getItem('startValue')
+        let maxValue = localStorage.getItem('maxValue')
+        if (startValue && maxValue) {
+            setStart(JSON.parse(startValue))
+            setMax(JSON.parse(maxValue))
+            setScore(JSON.parse(startValue))
         }
     }, [])
 
-    useEffect(() => {
-        localStorage.setItem('scoreValue', JSON.stringify(score))
-    }, [score])
-
-
-
+    //в каждой функции написать логику
     const startScore = (start: number) => {
-        if (start) {
-            setStart(start)
-        } else {
-            setError('start меньше 0')
+        setStart(start);
+        if (start < 0 || start == max){
+            setError('incorrect value')
+        }else{
+            setError(null);
         }
-        console.log(`start=` + start)
     }
-
-
     const maxScore = (max: number) => {
-        if (max ) {
-            setMax(max)
-        } else {
-            setError('максимальное значение меньше стартового')
+        setMax(max);
+
+        if (max<0 || max ==start){
+            setError('incorrect value')
+        }else{
+            setError(null)
         }
-        console.log(`max=` + max)
-    }
 
+    }
     const buttonSet = () => {
-
-        localStorage.clear()
-        reset(start)
+        setScore(start)
+        setEdit(!edit)
+        localStorage.setItem('startValue', JSON.stringify(start))
+        localStorage.setItem('maxValue', JSON.stringify(max))
     }
-
     // ______________________________________________________
     const increment = () => {
         if (score && score < max)
             setScore(score + 1)
     }
-    const reset = (score: number) => {
-        localStorage.clear()
-        setScore(score)
-
-
-    }
-    const className = `${score === max ? s.red : ''} ${s.score}`
-
+      const className = `${score === max ? s.red : ''} ${s.score}`
+    const classNameInput = `${error ? s.inputRed : ''} ${s.score} ${className}`
     //______________________________________________________
 
-
     return (
-        <div className={s.allWrapper}>
-            <div className={s.wrapperInput1}>
-                <div className={s.valueInput}>
-                    <div>
-                        <span>start value</span>
-                        <Input type={'number'} callBackInput={startScore}/>
 
-                    </div>
-                    <div>
+            edit
+            ?<SetValuePage maxScore={maxScore} buttonSet={buttonSet}  max={max} callBackInput={startScore} classNameInput={classNameInput} start={start} startScore={startScore}/>
+            :<TablePage classNameInput={classNameInput} start={start} max={max} score={score} increment={increment} buttonSet={buttonSet} error={error}/>
 
-                        <span>max value</span>
-                        <Input type={'number'} callBackInput={maxScore}/>
 
-                    </div>
-                </div>
-                <div className={s.setButton}>
-
-                    <Button disabled={start < 0 || max < 0 || max <= start} name={'set'} callBackButton={buttonSet}/>
-
-                </div>
-            </div>
-            <div className={s.wrapperButton2}>
-                <div className={className}>
-                    {/*className={error ? s.errorRed : ''}*/}
-                    <div>
-                        {score === null ? 'Введите значение and set' : score}
-                        {/*проверка на ввод значение введи и отправь*/}
-                    </div>
-
-                </div>
-                <div className={s.containerButton}>
-
-                    <span><Button disabled={score === max} name={'inc'} callBackButton={increment}/></span>
-                    <span><Button disabled={score === start} name={'reset'} callBackButton={buttonSet}/></span>
-
-                </div>
-            </div>
-        </div>
-    );
+    )
 }
 
 export default App;

@@ -1,9 +1,12 @@
 import React, {ChangeEvent} from 'react';
 
+
+
 type InputType = {
     callBackInput: (value: number)=> void
     type: string
-
+    value:number
+    className?: string
 }
 
 export const Input = (props: InputType) => {
@@ -14,6 +17,6 @@ export const Input = (props: InputType) => {
     }
 
     return (
-        <input onChange={inputHandler} type={props.type}/>
+        <input className={props.className} value={props.value} onChange={inputHandler} type={props.type}/>
     );
 };
